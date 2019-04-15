@@ -6,9 +6,7 @@ The programs are generic so should work in a variety of contexts.
 
 # Getting Started
 
-These scripts can be run with Python.
-
-In Bupa, this is only possible if you have a Virtual Machine with Anaconda or equalivalent package installed.
+These scripts can be run with Python 3.
 
 # Scripts available
 
