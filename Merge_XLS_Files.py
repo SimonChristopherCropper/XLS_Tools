@@ -57,9 +57,6 @@ if ROOT.dirname:
     # Some rudimentary feedbak
     print('Selected "{}" directory to import'.format(ROOT.dirname))
 
-    # Create dataframe store data
-    ALL_DATA = pd.DataFrame()
-
     # Rudimentary trick to ensure headerf is only collected once
     ONE_TIME = True
 
@@ -78,6 +75,9 @@ if ROOT.dirname:
     print("There are {} xlsx files in that directory".format(N))
 
     for SheetIndex in range(0, NUM_SHEETS):
+
+        # Create dataframe store data
+        ALL_DATA = pd.DataFrame()
 
         # Create an output file with sheet suffix
         SheetLabel = str(SheetIndex + 1)
