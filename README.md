@@ -18,11 +18,23 @@ A csv file is exported, rather than a spreadsheet, as some formatting is introdu
 
 The program is run by typing "python Merge_XLS_Files.py" in the Ancaconda console. A dialog will appear allowing you to select a directory to import.
 
-The merged output will be stored in the "output_data" directory for each sheet. This data is best cleansed before continueing.
+The merged output will be stored in the "output_data" directory for each sheet. This data is best cleansed before continuing.
 
 Assumptions
 1.	Only tested in Windows OS
 2.	All files should contain the same data. Column don't have to be in the same order but need to have the exact same title. The order of columns will match the first file imported.
+
+## Convert CSV to XLS
+
+This script is used to merge a directory of csv files to xls/xlsx files of the same name in the same directory.
+
+The program is run by typing "python convert_csv_to_xls.py" in the Ancaconda console. A dialog will appear allowing you to select a directory to convert.
+
+Assumptions
+1. Only tested in Windows OS.
+2. CSV have headers
+
+Explanatory Note - The import routine in Excel has limits on the length of fields that can be imported. These limits vary between versions and are significantly smaller than the upper size limit allowed for text cells. These limits do not exist in Python/Pandas.
 
 # Contribute
 

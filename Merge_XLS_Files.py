@@ -51,13 +51,13 @@ ROOT.dirname = filedialog.askdirectory()
 OUTPUT_FILE_NAME = os.getcwd() + '\\output_data\\master'
 OUTPUT_FILE_EXT = '.csv'
 
-# Continue if dialog returns a list of names
+# Continue if dialog returns a directory name
 if ROOT.dirname:
 
     # Some rudimentary feedbak
     print('Selected "{}" directory to import'.format(ROOT.dirname))
 
-    # Rudimentary trick to ensure headerf is only collected once
+    # Rudimentary trick to ensure header is only collected once
     ONE_TIME = True
 
     # Create list of spreadsheets in directory
