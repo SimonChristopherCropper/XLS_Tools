@@ -19,7 +19,6 @@ Assumptions
 same order but need to have the exact same title. The order of columns will
 match the first file imported.
 
-
 Programmed by Simon Christopher Cropper 10 April 2018
 
 """
