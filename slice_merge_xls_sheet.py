@@ -23,6 +23,11 @@ match the first file imported.
 
 Programmed by Simon Christopher Cropper 28 January 2020
 
+TODO
+[ ] incorporate variables in config file
+[ ] document code
+[ ] update README
+
 """
 
 #***********************************************************************
