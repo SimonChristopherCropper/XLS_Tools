@@ -4,9 +4,9 @@
 """
 -------------------     slice_merge_xls_sheet()    ---------------------
 
-This script is used to 
-   - merge a directory of identically formatted xls/xlsx files 
-   - extract a window of data from a designated sheet and 
+This script is used to
+   - merge a directory of identically formatted xls/xlsx files
+   - extract a window of data from a designated sheet and
    - save the merged data to a csv in the same directory as the program.
 
 A csv file is exported, rather than a spreadsheet, so text tools can be used
@@ -55,35 +55,32 @@ TODO
 import glob
 import sys
 import os
-import tempfile
-import tkinter as tk
-from tkinter import filedialog
-import pandas as pd
 import configparser
+import pandas as pd
 
 #-----------------------------------------------------------------------
 #--- CONFIG
 #-----------------------------------------------------------------------
 
-config = configparser.ConfigParser()
-config.read('slice_merge_xls_sheet.ini')
+CONFIG = configparser.ConfigParser()
+CONFIG.read('slice_merge_xls_sheet.ini')
 
 #-----------------------------------------------------------------------
 #--- VARIABLES
 #-----------------------------------------------------------------------
 
-dirname = config['path']['XLS_Dir']
-TARGET_SHEET = config['location']['Sheet']
-Drop_Cols = config['location']['DropCols'].split(",")
-Drop_Rows = config['location']['DropRows'].split(",")
+DIRNAME = CONFIG['path']['XLS_Dir']
+TARGET_SHEET = CONFIG['location']['Sheet']
+DROP_COLS = CONFIG['location']['DropCols'].split(",")
+DROP_ROWS = CONFIG['location']['DropRows'].split(",")
 
 # Establish where we putting the consolidated
 OUTPUT_FILE_NAME = os.getcwd() + '\\output_data\\master'
 OUTPUT_FILE_EXT = '.csv'
 
 # Create an output file with sheet suffix
-output_file = OUTPUT_FILE_NAME + "_sheet_" + TARGET_SHEET + OUTPUT_FILE_EXT
-temp_file = OUTPUT_FILE_NAME + "_temp_" + TARGET_SHEET + OUTPUT_FILE_EXT
+OUTPUT_FILE = OUTPUT_FILE_NAME + "_sheet_" + TARGET_SHEET + OUTPUT_FILE_EXT
+TEMP_FILE = OUTPUT_FILE_NAME + "_temp_" + TARGET_SHEET + OUTPUT_FILE_EXT
 
 #-----------------------------------------------------------------------
 #--- MAIN PROGRAM
@@ -91,19 +88,18 @@ temp_file = OUTPUT_FILE_NAME + "_temp_" + TARGET_SHEET + OUTPUT_FILE_EXT
 
 
 # Continue if dialog returns a directory name
-if dirname:
+if DIRNAME:
     # Some rudimentary feedback
-    print('Selected "{}" directory to import'.format(dirname))
+    print('Selected "{}" directory to import'.format(DIRNAME))
 
     # Create list of spreadsheets in directory
-    FILE_LIST = glob.glob(dirname + "/*.xls?")
-    
+    FILE_LIST = glob.glob(DIRNAME + "/*.xls?")
+
     # Establish how many files were collated
     N = len(FILE_LIST)
 
     # Establish number of sheets in first file
     XLSX_FILE = pd.ExcelFile(FILE_LIST[1])
-    
 
     # Let the user know what is going on
     print(' ')
@@ -124,14 +120,14 @@ if dirname:
         sys.stdout.flush()
 
         df = pd.read_excel(f, ignore_index=True, sheet_name=TARGET_SHEET, skiprows=3)
-        df.drop(Drop_Cols, axis=1, inplace=True)
-        
+        df.drop(DROP_COLS, axis=1, inplace=True)
+
         # Transpose Data
         df_transposed = df.transpose()
-        df_transposed.to_csv(temp_file, header=False)
-        df_fixed = pd.read_csv(temp_file, header=0, index_col=0)
+        df_transposed.to_csv(TEMP_FILE, header=False)
+        df_fixed = pd.read_csv(TEMP_FILE, header=0, index_col=0)
         df_fixed.dropna(axis=0, how='all', inplace=True)
-        df_fixed['source']=f
+        df_fixed['source'] = f
 
         # Append the single file's data to the consolidated dataframe
         ALL_DATA = ALL_DATA.append(df_fixed, ignore_index=True, sort=False)
@@ -139,14 +135,14 @@ if dirname:
     # Importing finished. Save data to CSV
     ALL_DATA.dropna(axis=0, how='all', inplace=True)
     ALL_DATA.drop_duplicates(keep='first', inplace=True)
-    ALL_DATA.drop(Drop_Rows, axis=1, inplace=True)
-    ALL_DATA.to_csv(output_file, index=False)
+    ALL_DATA.drop(DROP_ROWS, axis=1, inplace=True)
+    ALL_DATA.to_csv(OUTPUT_FILE, index=False)
 
     # User feedback
     print(" ")
-    print('Consolidated {} sheets stored in "{}"'.format(TARGET_SHEET, output_file))
-    os.remove(temp_file)
-    
+    print('Consolidated {} sheets stored in "{}"'.format(TARGET_SHEET, OUTPUT_FILE))
+    os.remove(TEMP_FILE)
+
 # Capture that dialog exited and returns no list
 else:
 
