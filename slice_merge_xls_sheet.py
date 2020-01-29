@@ -24,7 +24,6 @@ match the first file imported.
 Programmed by Simon Christopher Cropper 28 January 2020
 
 TODO
-[ ] incorporate variables in config file
 [ ] document code
 [ ] update README
 
@@ -60,38 +59,51 @@ import tempfile
 import tkinter as tk
 from tkinter import filedialog
 import pandas as pd
+import configparser
 
 #-----------------------------------------------------------------------
-#--- DIRECTORY DIALOG
+#--- CONFIG
 #-----------------------------------------------------------------------
 
-ROOT = tk.Tk()
-ROOT.withdraw()
-ROOT.dirname = filedialog.askdirectory()
+config = configparser.ConfigParser()
+config.read('slice_merge_xls_sheet.ini')
 
 #-----------------------------------------------------------------------
-#--- MAIN PROGRAM
+#--- VARIABLES
 #-----------------------------------------------------------------------
+
+dirname = config['path']['XLS_Dir']
+TARGET_SHEET = config['location']['Sheet']
+Drop_Cols = config['location']['DropCols'].split(",")
+Drop_Rows = config['location']['DropRows'].split(",")
 
 # Establish where we putting the consolidated
 OUTPUT_FILE_NAME = os.getcwd() + '\\output_data\\master'
 OUTPUT_FILE_EXT = '.csv'
 
-# Continue if dialog returns a directory name
-if ROOT.dirname:
+# Create an output file with sheet suffix
+output_file = OUTPUT_FILE_NAME + "_sheet_" + TARGET_SHEET + OUTPUT_FILE_EXT
+temp_file = OUTPUT_FILE_NAME + "_temp_" + TARGET_SHEET + OUTPUT_FILE_EXT
 
+#-----------------------------------------------------------------------
+#--- MAIN PROGRAM
+#-----------------------------------------------------------------------
+
+
+# Continue if dialog returns a directory name
+if dirname:
     # Some rudimentary feedback
-    print('Selected "{}" directory to import'.format(ROOT.dirname))
+    print('Selected "{}" directory to import'.format(dirname))
 
     # Create list of spreadsheets in directory
-    FILE_LIST = glob.glob(ROOT.dirname + "/*.xls?")
-
+    FILE_LIST = glob.glob(dirname + "/*.xls?")
+    
     # Establish how many files were collated
     N = len(FILE_LIST)
 
     # Establish number of sheets in first file
     XLSX_FILE = pd.ExcelFile(FILE_LIST[1])
-    TARGET_SHEET = "Questionnaire"
+    
 
     # Let the user know what is going on
     print(' ')
@@ -100,13 +112,9 @@ if ROOT.dirname:
     # Create dataframe store data
     ALL_DATA = pd.DataFrame()
 
-    # Create an output file with sheet suffix
-    output_file = OUTPUT_FILE_NAME + "_sheet_" + TARGET_SHEET + OUTPUT_FILE_EXT
-    temp_file = OUTPUT_FILE_NAME + "_temp_" + TARGET_SHEET + OUTPUT_FILE_EXT
-
     # Let the user know what is going on
     print(' ')
-    print('Importing data from Sheet {}...'.format(TARGET_SHEET))
+    print('Extracting {} data from sheets...'.format(TARGET_SHEET))
 
     # Reiterate through list of files
     for f in FILE_LIST:
@@ -116,7 +124,7 @@ if ROOT.dirname:
         sys.stdout.flush()
 
         df = pd.read_excel(f, ignore_index=True, sheet_name=TARGET_SHEET, skiprows=3)
-        df.drop(["Unnamed: 0", "QUESTIONS", "SAMPLE"], axis=1, inplace=True)
+        df.drop(Drop_Cols, axis=1, inplace=True)
         
         # Transpose Data
         df_transposed = df.transpose()
@@ -131,13 +139,14 @@ if ROOT.dirname:
     # Importing finished. Save data to CSV
     ALL_DATA.dropna(axis=0, how='all', inplace=True)
     ALL_DATA.drop_duplicates(keep='first', inplace=True)
-    ALL_DATA.drop(['1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0'], axis=1, inplace=True)
+    ALL_DATA.drop(Drop_Rows, axis=1, inplace=True)
     ALL_DATA.to_csv(output_file, index=False)
 
     # User feedback
     print(" ")
-    print('Data in sheet {} stored in "{}"'.format(TARGET_SHEET, output_file))
-
+    print('Consolidated {} sheets stored in "{}"'.format(TARGET_SHEET, output_file))
+    os.remove(temp_file)
+    
 # Capture that dialog exited and returns no list
 else:
 
