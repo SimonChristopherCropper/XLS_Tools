@@ -13,18 +13,17 @@ A csv file is exported, rather than a spreadsheet, so text tools can be used
 to cleanse the file.
 
 The program is run by typing "slice_merge_xls_sheet.py" in the Ancaconda
-console. A dialog will appear allowing you to select a directory to import.
+console. 
+
+The program requires details to be entered in the config file to run.
+This includes the Sheet to collate,columns to drop and rows to drop.
 
 Assumptions
 1. Only tested in Windows OS
-2. All files should contain the same data. Column don't have to be in the
-same order but need to have the exact same title. The order of columns will
-match the first file imported.
 
 Programmed by Simon Christopher Cropper 28 January 2020
 
 TODO
-[ ] document code
 [ ] update README
 
 """
@@ -71,6 +70,7 @@ CONFIG.read('slice_merge_xls_sheet.ini')
 
 DIRNAME = CONFIG['path']['XLS_Dir']
 TARGET_SHEET = CONFIG['location']['Sheet']
+LINES_HEADER = int(CONFIG['location']['Lines2Header'])
 DROP_COLS = CONFIG['location']['DropCols'].split(",")
 DROP_ROWS = CONFIG['location']['DropRows'].split(",")
 
@@ -85,7 +85,6 @@ TEMP_FILE = OUTPUT_FILE_NAME + "_temp_" + TARGET_SHEET + OUTPUT_FILE_EXT
 #-----------------------------------------------------------------------
 #--- MAIN PROGRAM
 #-----------------------------------------------------------------------
-
 
 # Continue if dialog returns a directory name
 if DIRNAME:
@@ -119,10 +118,11 @@ if DIRNAME:
         sys.stdout.write('#')
         sys.stdout.flush()
 
-        df = pd.read_excel(f, ignore_index=True, sheet_name=TARGET_SHEET, skiprows=3)
+        # Reads in sheet from workbook, starting from the line after Lines2Header
+        df = pd.read_excel(f, ignore_index=True, sheet_name=TARGET_SHEET, skiprows=LINES_HEADER)
         df.drop(DROP_COLS, axis=1, inplace=True)
 
-        # Transpose Data
+        # Transpose Data, pushed through csv to force column and row labels to stick
         df_transposed = df.transpose()
         df_transposed.to_csv(TEMP_FILE, header=False)
         df_fixed = pd.read_csv(TEMP_FILE, header=0, index_col=0)
