@@ -38,6 +38,22 @@ Assumptions
 
 Explanatory Note - The import routine in Excel has limits on the length of fields that can be imported. These limits vary between versions and are significantly smaller than the upper size limit allowed for text cells. These limits do not exist in Python/Pandas.
 
+### Slice then Merge XLS Files
+
+This script is used to
+   - merge a directory of identically formatted xls/xlsx files
+   - extract a window of data from a designated sheet and
+   - save the merged data to a csv in the same directory as the program.
+
+A csv file is exported, rather than a spreadsheet, so text tools can be used to cleanse the file.
+
+The program is run by typing "slice_merge_xls_sheet.py" in the Ancaconda console. 
+
+The program requires details to be entered in the config file to run. This includes the Sheet to collate,columns to drop and rows to drop.
+
+Assumptions
+1. Only tested in Windows OS
+
 ## Contribute
 
 If you want to contribute to this list of scripts, clone the VSTS repo and test your updates locally before pushing to master.

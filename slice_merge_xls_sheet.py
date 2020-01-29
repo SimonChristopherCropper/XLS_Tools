@@ -23,9 +23,6 @@ Assumptions
 
 Programmed by Simon Christopher Cropper 28 January 2020
 
-TODO
-[ ] update README
-
 """
 
 #***********************************************************************
