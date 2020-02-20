@@ -18,7 +18,7 @@ This script is used to merge a directory of identically formatted xls/xlsx files
 
 A csv file is exported, rather than a spreadsheet, as some formatting is introduced by the python library if exported to Excel. There is also no opportunity to clean the data before importing into a new master spreadsheet.
 
-The program is run by typing "python Merge_XLS_Files.py" in the Ancaconda console. A dialog will appear allowing you to select a directory to import.
+The program is run by typing "python Merge_XLS_Files.py" in the Anaconda console. A dialog will appear allowing you to select a directory to import.
 
 The merged output will be stored in the "output_data" directory for each sheet. This data is best cleansed before continuing.
 
@@ -30,7 +30,7 @@ Assumptions
 
 This script is used to merge a directory of csv files to xls/xlsx files of the same name in the same directory.
 
-The program is run by typing "python convert_csv_to_xls.py" in the Ancaconda console. A dialog will appear allowing you to select a directory to convert.
+The program is run by typing "python convert_csv_to_xls.py" in the Anaconda console. A dialog will appear allowing you to select a directory to convert.
 
 Assumptions
 1. Only tested in Windows OS.
@@ -47,7 +47,7 @@ This script is used to
 
 A csv file is exported, rather than a spreadsheet, so text tools can be used to cleanse the file.
 
-The program is run by typing "slice_merge_xls_sheet.py" in the Ancaconda console. 
+The program is run by typing "python slice_merge_xls_sheet.py" in the Anaconda console. A dialog will appear allowing you to select a directory to import. It is essential that a config is placed in the import directory. Sample config files are available in the subdirectory 'sample_ini'. 
 
 The program requires details to be entered in the config file to run. This includes the Sheet to collate,columns to drop and rows to drop.
 
