@@ -9,11 +9,11 @@ This script is used to
    - extract a window of data from a designated sheet and
    - save the merged data to a csv in the same directory as the program.
 
-A csv file is exported, rather than a spreadsheet, so text tools can be used
-to cleanse the file.
+A csv file is exported, rather than a spreadsheet, so text tools can 
+be used to cleanse the file.
 
-The program is run by typing "slice_merge_xls_sheet.py" in the Ancaconda
-console. 
+The program is run by typing "python slice_merge_xls_sheet.py" in 
+the Ancaconda console. 
 
 The program requires details to be entered in the config file to run.
 This includes the Sheet to collate,columns to drop and rows to drop.
@@ -53,39 +53,65 @@ import sys
 import os
 import configparser
 import pandas as pd
+import tkinter as tk
+from tkinter import filedialog
 
 #-----------------------------------------------------------------------
-#--- CONFIG
+#--- DIRECTORY DIALOG
 #-----------------------------------------------------------------------
 
-CONFIG = configparser.ConfigParser()
-CONFIG.read('slice_merge_xls_sheet.ini')
+ROOT = tk.Tk()
+ROOT.withdraw()
+ROOT.dirname = filedialog.askdirectory()
 
 #-----------------------------------------------------------------------
-#--- VARIABLES
+#--- BASIC CHOICES
 #-----------------------------------------------------------------------
 
-DIRNAME = CONFIG['path']['XLS_Dir']
-TARGET_SHEET = CONFIG['location']['Sheet']
-LINES_HEADER = int(CONFIG['location']['Lines2Header'])
-DROP_COLS = CONFIG['location']['DropCols'].split(",")
-DROP_ROWS = CONFIG['location']['DropRows'].split(",")
-
-# Establish where we putting the consolidated
-OUTPUT_FILE_NAME = os.getcwd() + '\\output_data\\master'
-OUTPUT_FILE_EXT = '.csv'
-
-# Create an output file with sheet suffix
-OUTPUT_FILE = OUTPUT_FILE_NAME + "_sheet_" + TARGET_SHEET + OUTPUT_FILE_EXT
-TEMP_FILE = OUTPUT_FILE_NAME + "_temp_" + TARGET_SHEET + OUTPUT_FILE_EXT
+if ROOT.dirname:
+    ini_file = ROOT.dirname + os.sep + 'slice_merge_xls_sheet.ini'
+    if os.path.exists(ini_file):
+        Proceed = True
+    else:
+        print("No ini file in directory. Bye.")
+        Proceed = False
+else:
+    print("No directory selected. Bye.")
+    Proceed = False
 
 #-----------------------------------------------------------------------
 #--- MAIN PROGRAM
 #-----------------------------------------------------------------------
 
 # Continue if dialog returns a directory name
-if DIRNAME:
-    # Some rudimentary feedback
+if Proceed:
+
+    #-----------------------------------------------------------------------
+    #--- CONFIG
+    #-----------------------------------------------------------------------
+
+    CONFIG = configparser.ConfigParser()
+    CONFIG.read(ini_file)
+
+    #-----------------------------------------------------------------------
+    #--- VARIABLES
+    #-----------------------------------------------------------------------
+
+    DIRNAME = ROOT.dirname
+    TARGET_SHEET = CONFIG['location']['Sheet']
+    LINES_HEADER = int(CONFIG['location']['Lines2Header'])
+    DROP_COLS = CONFIG['location']['DropCols'].split(",")
+    DROP_ROWS = CONFIG['location']['DropRows'].split(",")
+
+    # Establish where we putting the consolidated
+    OUTPUT_FILE_NAME = os.getcwd() + '\\output_data\\master'
+    OUTPUT_FILE_EXT = '.csv'
+
+    # Create an output file with sheet suffix
+    OUTPUT_FILE = OUTPUT_FILE_NAME + "_sheet_" + TARGET_SHEET + OUTPUT_FILE_EXT
+    TEMP_FILE = OUTPUT_FILE_NAME + "_temp_" + TARGET_SHEET + OUTPUT_FILE_EXT
+
+   # Some rudimentary feedback
     print('Selected "{}" directory to import'.format(DIRNAME))
 
     # Create list of spreadsheets in directory
@@ -140,7 +166,3 @@ if DIRNAME:
     print('Consolidated {} sheets stored in "{}"'.format(TARGET_SHEET, OUTPUT_FILE))
     os.remove(TEMP_FILE)
 
-# Capture that dialog exited and returns no list
-else:
-
-    print("No directory selected. Bye.")
