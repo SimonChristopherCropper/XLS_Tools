@@ -54,6 +54,22 @@ The program requires details to be entered in the config file to run. This inclu
 Assumptions
 1. Only tested in Windows OS
 
+### Extract excel information
+
+This script is used to
+   - extract information from .xlsx file where the cells are highlighted with a background color
+   - extract information from .xlsx file where the cells contains information with a tag
+
+The program is run by typing "excel_info_extraction.py" in the program directory in the Ancaconda console.
+
+The working directory will be asked at the beginning. 
+Then, user needs to type in what's the source file name and the spreadsheet name. 
+Output will be saved to the same directory as source file and it is named as OUTPUT.xlsx.
+
+Assumptions
+1. Current program only works for the cells that are highlighted in yellow
+2. The matching tag string needs to be adjusted for utilisation
+
 ## Contribute
 
 If you want to contribute to this list of scripts, clone the VSTS repo and test your updates locally before pushing to master.
