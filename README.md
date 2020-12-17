@@ -70,6 +70,16 @@ Assumptions
 1. Current program only works for the cells that are highlighted in yellow
 2. The matching tag string needs to be adjusted for utilisation
 
+### VBA Macro: Zip Column of data
+
+This macro will create a comma separated list of all the values from the column below the cell selected. Blanks will be ignored. The concatenated cleaned list of values will be inserted in the cell two cell below the last value in a column.
+
+Assumptions: 
+   - There will not be more than 10K cells being condensed
+   - there will be less than 1000 unique values
+   - the standard delimiter is a comma and the output delimiter a semi-colon;
+   - routine is case insensitive - so "aaa" is the same as "AAA"
+
 ## Contribute
 
 If you want to contribute to this list of scripts, clone the VSTS repo and test your updates locally before pushing to master.
