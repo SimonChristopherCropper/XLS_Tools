@@ -1,22 +1,22 @@
 Sub Zip_Column()
 '
-'-------------------------- Zip_Column() ------------------------------ 
+'-------------------------- Zip_Column() ------------------------------
 '
-' This macro will create a comma separated list of all the values from 
-' the column below the cell selected. Blanks will be ignored. The 
-' concatenated cleaned list of values will be inserted in the cell 
+' This macro will create a comma separated list of all the values from
+' the column below the cell selected. Blanks will be ignored. The
+' concatenated cleaned list of values will be inserted in the cell
 ' two cell below the last value in a column.
 '
-' None destructive collapsing of a column of strings or comma separated 
-' strings into a single field. Duplicates are removed and the 
+' None destructive collapsing of a column of strings or comma separated
+' strings into a single field. Duplicates are removed and the
 ' data is sorted.
 '
-' Assumptions: 
-' (1) There will not be more than 10K cells being condensed; 
+' Assumptions:
+' (1) There will not be more than 10K cells being condensed;
 ' (2) there will be less than 1000 unique values
-' (3) the standard delimiter is a comma and the output delimiter a 
-'     semi-colon; 
-' (4) routine is case insensitive - so "aaa" is the same 
+' (3) the standard delimiter is a comma and the output delimiter a
+'     semi-colon;
+' (4) routine is case insensitive - so "aaa" is the same
 '     as "AAA"
 '
 ' Programmed by Simon Christopher Cropper 17 December 2020
@@ -52,8 +52,8 @@ Sub Zip_Column()
     ' Record where we are
     Set firstCell = Selection
     
-    ' Record last cell in column with a value. This techniques allows 
-    'blanks to be skipped
+    ' Record last cell in column with a value. This techniques allows
+    ' blanks to be skipped
     Set lastCell = Cells(Rows.Count, firstCell.Column).End(xlUp)
     
     ' Select range and copy
@@ -74,7 +74,7 @@ Sub Zip_Column()
     ' remove duplicates
     Selection.RemoveDuplicates Columns:=1, Header:=xlNo
     
-    ' Flip the data so blanks are at bottom so we can identify only 
+    ' Flip the data so blanks are at bottom so we can identify only
     ' those cells with values
     Set myCells = Selection
     Application.Range(myCells.Address).SortSpecial Order1:=xlDescending
@@ -85,9 +85,10 @@ Sub Zip_Column()
     Set myCells = Selection
     
     ' Clean up the list. Assumes cells may actually have a comma separated
-    ' list of values.    
+    ' list of values.
     Selection.End(xlDown).Select
     ActiveCell.Offset(2, 0).Select
+    ActiveCell.NumberFormat = "General"
     ActiveCell.Formula = "=SUBSTITUTE(SUBSTITUTE(TEXTJOIN(" & Comma1 & ",TRUE," & myCells.Address & ")," & Comma1 & "," & Comma0 & ")," & Comma2 & "," & Comma0 & ")"
     Selection.Copy
     
@@ -115,9 +116,10 @@ Sub Zip_Column()
     ' Work out the place to put formula and insert
     Selection.End(xlDown).Select
     ActiveCell.Offset(2, 0).Select
+    ActiveCell.NumberFormat = "General"
     ActiveCell.Formula = "=TEXTJOIN(" & FinalDelimiter & ",TRUE," & myCells.Address & ")"
-
-    ' Copy cell with list (currently a formula)
+    
+    ' Copy cell with list (currently a formula)   
     Selection.Copy
 
     ' Return to cell just below original list, past values
@@ -130,5 +132,4 @@ Sub Zip_Column()
     ShortList.Select
 
 End Sub
-
 
