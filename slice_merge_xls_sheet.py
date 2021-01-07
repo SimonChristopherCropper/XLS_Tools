@@ -9,11 +9,11 @@ This script is used to
    - extract a window of data from a designated sheet and
    - save the merged data to a csv in the same directory as the program.
 
-A csv file is exported, rather than a spreadsheet, so text tools can 
+A csv file is exported, rather than a spreadsheet, so text tools can
 be used to cleanse the file.
 
-The program is run by typing "python slice_merge_xls_sheet.py" in 
-the Ancaconda console. 
+The program is run by typing "python slice_merge_xls_sheet.py" in
+the Ancaconda console.
 
 The program requires details to be entered in the config file to run.
 This includes the Sheet to collate,columns to drop and rows to drop.
@@ -52,9 +52,9 @@ import glob
 import sys
 import os
 import configparser
-import pandas as pd
 import tkinter as tk
 from tkinter import filedialog
+import pandas as pd
 
 #-----------------------------------------------------------------------
 #--- DIRECTORY DIALOG
@@ -69,29 +69,29 @@ ROOT.dirname = filedialog.askdirectory()
 #-----------------------------------------------------------------------
 
 if ROOT.dirname:
-    ini_file = ROOT.dirname + os.sep + 'slice_merge_xls_sheet.ini'
-    if os.path.exists(ini_file):
-        Proceed = True
+    INI_FILE = ROOT.dirname + os.sep + 'slice_merge_xls_sheet.ini'
+    if os.path.exists(INI_FILE):
+        PROCEED = True
     else:
         print("No ini file in directory. Bye.")
-        Proceed = False
+        PROCEED = False
 else:
     print("No directory selected. Bye.")
-    Proceed = False
+    PROCEED = False
 
 #-----------------------------------------------------------------------
 #--- MAIN PROGRAM
 #-----------------------------------------------------------------------
 
 # Continue if dialog returns a directory name
-if Proceed:
+if PROCEED:
 
     #-----------------------------------------------------------------------
     #--- CONFIG
     #-----------------------------------------------------------------------
 
     CONFIG = configparser.ConfigParser()
-    CONFIG.read(ini_file)
+    CONFIG.read(INI_FILE)
 
     #-----------------------------------------------------------------------
     #--- VARIABLES
@@ -165,4 +165,4 @@ if Proceed:
     print(" ")
     print('Consolidated {} sheets stored in "{}"'.format(TARGET_SHEET, OUTPUT_FILE))
     os.remove(TEMP_FILE)
-
+    

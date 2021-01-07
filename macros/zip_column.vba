@@ -60,6 +60,10 @@ Sub Zip_Column()
     Range(firstCell.Address, lastCell.Address).Select
     Selection.Copy
     
+    ' For sanity, prevent the screen moving until finished
+    ' IF DEBUGGING, Comment out the next line
+    Application.ScreenUpdating = False
+    
     ' Figure out where we want the final list
     Range(lastCell.Address).Select
     ActiveCell.Offset(2, 0).Select
@@ -131,5 +135,10 @@ Sub Zip_Column()
     Selection.Delete Shift:=xlUp
     ShortList.Select
 
+    ' For sanity, prevent the screen moving until finished
+    Application.ScreenUpdating = True
+    
+    ShortList.Select
+   
 End Sub
 
