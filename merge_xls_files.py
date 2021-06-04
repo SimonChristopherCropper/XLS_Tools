@@ -77,9 +77,6 @@ if ROOT.dirname:
     # Some rudimentary feedbak
     print('Selected "{}" directory to import'.format(ROOT.dirname))
 
-    # Rudimentary trick to ensure header is only collected once
-    ONE_TIME = True
-
     # Create list of spreadsheets in directory
     FILE_LIST = glob.glob(ROOT.dirname + "/*.xls?")
 
@@ -114,20 +111,15 @@ if ROOT.dirname:
             sys.stdout.write('#')
             sys.stdout.flush()
 
-            # Record the header of the first file imported
-            if ONE_TIME:
-                df = pd.read_excel(f, ignore_index=True, sheet_name=SheetIndex)
-                ONE_TIME = False
-            # Ignore the header on the remaining files
-            else:
-                df = pd.read_excel(f, ignore_index=True, sheet_name=SheetIndex, skip_row=0)
+            # Read data into dataframe
+            df = pd.read_excel(f, sheet_name=SheetIndex)
 
             # Append the single file's data to the consolidated dataframe
-            ALL_DATA = ALL_DATA.append(df, ignore_index=True, sort=False)
+            ALL_DATA = ALL_DATA.append(df, sort=False)
 
         # Importing finished. Save data to CSV
         ALL_DATA.to_csv(output_file, index=False)
-
+ 
         # User feedback
         print(" ")
         print('Data in sheet {} stored in "{}"'.format(SheetLabel, output_file))
